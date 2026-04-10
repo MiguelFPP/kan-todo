@@ -37,8 +37,52 @@ This skeleton isn't just a project; it's a **Master Template** designed for long
 -   **Monorepo:** Turborepo + NPM Workspaces.
 -   **Frontend:** Next.js 14+ (App Router) + Tailwind CSS + Lucide Icons.
 -   **Backend:** NestJS + Prisma ORM (PostgreSQL).
--   **Infrastructure:** Docker Compose + LocalStack (S3).
+-   **Infrastructure:** Docker Compose + **LocalStack 3.0 (S3)**.
 -   **Validation:** Zod (Shared between layers).
+
+---
+
+## ☁️ LocalStack & AWS CLI
+
+We use **LocalStack 3.0** to emulate AWS services locally. This specific version is used because it doesn't require API keys or OAuth for basic services like S3, making it ideal for a seamless developer experience.
+
+### 1. Install AWS CLI
+To interact with LocalStack, you'll need the AWS CLI installed:
+
+```bash
+# Linux
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+# Configure with dummy data (LocalStack ignores these but AWS CLI needs them)
+aws configure
+# AWS Access Key ID [None]: test
+# AWS Secret Access Key [None]: test
+# Default region name [None]: us-east-1
+# Default output format [None]: json
+```
+
+### 2. S3 Cheat Sheet (using `awslocal`)
+We recommend using the `awslocal` wrapper (install via `pip install awscli-local`) or using the `--endpoint-url` flag with the standard AWS CLI.
+
+**Using standard AWS CLI:**
+```bash
+# Create a bucket
+aws --endpoint-url=http://localhost:4566 s3 mb s3://kan-todo-bucket
+
+# List buckets
+aws --endpoint-url=http://localhost:4566 s3 ls
+
+# Upload a file
+aws --endpoint-url=http://localhost:4566 s3 cp myfile.txt s3://kan-todo-bucket/
+
+# List files in a bucket
+aws --endpoint-url=http://localhost:4566 s3 ls s3://kan-todo-bucket --recursive
+
+# Delete a file
+aws --endpoint-url=http://localhost:4566 s3 rm s3://kan-todo-bucket/myfile.txt
+```
 
 ---
 
