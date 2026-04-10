@@ -11,6 +11,7 @@ This skeleton isn't just a project; it's a **Master Template** designed for long
 3.  **LocalStack Integration:** Develop and test cloud features (like S3 file uploads) locally without an AWS account or costs.
 4.  **Turborepo Orchestration:** Advanced build caching and task pipelines for a lightning-fast development cycle.
 5.  **Senior Standards:** Strict TypeScript mode, conventional commits ready, and containerized infrastructure from day one.
+6.  **Full Dockerization (New):** Develop the entire stack (API, Web, DB, S3) inside containers using **Node 25 (Debian)** for a consistent environment across any machine.
 
 ---
 
@@ -25,7 +26,7 @@ This skeleton isn't just a project; it's a **Master Template** designed for long
 │   ├── types/              # Shared Zod Schemas & TypeScript Types
 │   └── config/             # Shared ESLint, Tailwind, and TSConfig
 ├── docs/                   # Technical documentation
-├── docker-compose.yml      # Infrastructure (Postgres + LocalStack)
+├── docker-compose.yml      # Infrastructure + App Orchestration
 ├── turbo.json              # Monorepo task runner
 └── package.json            # Workspace configuration
 ```
@@ -39,6 +40,31 @@ This skeleton isn't just a project; it's a **Master Template** designed for long
 -   **Backend:** NestJS + Prisma ORM (PostgreSQL).
 -   **Infrastructure:** Docker Compose + **LocalStack 3.0 (S3)**.
 -   **Validation:** Zod (Shared between layers).
+
+---
+
+## 🐳 Full Monorepo Dockerization
+
+The project is fully containerized for development. This is the recommended way to run the project if you want to avoid installing specific Node versions or tools locally.
+
+### 1. Start everything
+```bash
+docker compose up --build
+```
+This will build the API and Web images (Node 25), install all dependencies, generate the Prisma client, and start PostgreSQL and LocalStack. **Hot Reload** is enabled via volumes.
+
+### 2. Useful Docker Commands
+
+**Service Management:**
+- **Stop all:** `docker compose down`
+- **View logs:** `docker compose logs -f`
+- **Restart API:** `docker compose restart api`
+
+**Prisma & Database:**
+Run these while the containers are up:
+- **Generate Prisma Client:** `docker exec -it kan-todo-api npx prisma generate`
+- **Push DB Schema:** `docker exec -it kan-todo-api npx prisma db push`
+- **Prisma Studio:** `docker exec -it kan-todo-api npx prisma studio` (Go to http://localhost:5555)
 
 ---
 
@@ -86,7 +112,9 @@ aws --endpoint-url=http://localhost:4566 s3 rm s3://kan-todo-bucket/myfile.txt
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Local Node.js)
+
+If you prefer to run Node.js on your host machine:
 
 ### 1. Prerequisites
 -   **Docker** and **Node.js 20+** installed.
@@ -94,7 +122,7 @@ aws --endpoint-url=http://localhost:4566 s3 rm s3://kan-todo-bucket/myfile.txt
 ### 2. Infrastructure
 Run the following in the root directory to start PostgreSQL and LocalStack (S3):
 ```bash
-docker compose up -d
+docker compose up -d postgres localstack
 ```
 
 ### 3. Installation
