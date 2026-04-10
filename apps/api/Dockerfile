@@ -1,7 +1,7 @@
 FROM node:25-bookworm-slim
 
 # Instalar dependencias del sistema necesarias para Prisma en Debian
-RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -y && apt-get install -y openssl procps && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
