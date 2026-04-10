@@ -9,6 +9,7 @@ import { PrismaUserRepository } from '../database/repositories/prisma-user.repos
 import { PrismaService } from '../database/prisma.service';
 import { BcryptService } from './bcrypt.service';
 import { JwtStrategy } from './jwt.strategy';
+import { AuthController } from '../../web/auth/auth.controller';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { JwtStrategy } from './jwt.strategy';
       signOptions: { expiresIn: '1d' },
     }),
   ],
+  controllers: [AuthController],
   providers: [
     PrismaService,
     JwtStrategy,

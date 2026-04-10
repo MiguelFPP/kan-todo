@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@next/swc-linux-x64-gnu": "^16.2.3",
+    "@types/cookie-parser": "^1.4.10",
     "prettier": "^3.0.0",
     "prisma": "^5.14.0",
     "turbo": "^2.0.0",
@@ -26,6 +27,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/passport-jwt": "^4.0.1",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1"
   }
