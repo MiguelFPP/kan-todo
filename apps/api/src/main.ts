@@ -14,7 +14,10 @@ async function bootstrap() {
     .setTitle('Kan-Todo API')
     .setDescription('The Kan-Todo API description')
     .setVersion('1.0')
+    .addBearerAuth() // Soporte para Bearer Token
+    .addCookieAuth('access_token') // Soporte para Cookie httpOnly
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 

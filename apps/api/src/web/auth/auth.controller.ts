@@ -6,12 +6,18 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
-import { RegisterDto, LoginDto, UserResponseDto } from '@kan-todo/types';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { RegisterUserUseCase } from '../../core/use-cases/auth/register-user.use-case';
 import { LoginUserUseCase } from '../../core/use-cases/auth/login-user.use-case';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import {
+  RegisterDto,
+  LoginDto,
+  UserResponseDto,
+} from './dto/auth-swagger.dto';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -21,12 +27,20 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiResponse({ status: 201, type: UserResponseDto })
+  @ApiResponse({ status: 409, description: 'User already exists' })
+  @ApiBody({ type: RegisterDto })
   async register(@Body() dto: RegisterDto): Promise<UserResponseDto> {
     return this.registerUseCase.execute(dto);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Login user and set httpOnly cookie' })
+  @ApiResponse({ status: 200, description: 'Login successful' })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  @ApiBody({ type: LoginDto })
   async login(
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) response: Response,
@@ -49,6 +63,8 @@ export class AuthController {
 
   @Post('logout')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Logout and clear cookie' })
+  @ApiResponse({ status: 200, description: 'Logged out' })
   async logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('access_token');
     return { message: 'Logged out' };
