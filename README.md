@@ -1,4 +1,4 @@
-# Kan-Todo: Senior Monorepo Template
+# Kan-Todo: Monorepo Template
 
 Kan-Todo is a high-performance, type-safe task management system built with a **Screaming Architecture**. It serves as a robust foundation for scalable full-stack applications, emphasizing separation of concerns and developer experience.
 
