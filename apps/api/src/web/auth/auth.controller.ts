@@ -5,12 +5,15 @@ import {
   HttpStatus,
   Post,
   Res,
+  UsePipes,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { RegisterUserUseCase } from '../../core/use-cases/auth/register-user.use-case';
 import { LoginUserUseCase } from '../../core/use-cases/auth/login-user.use-case';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { RegisterSchema, LoginSchema } from '@kan-todo/types';
+import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 import {
   RegisterDto,
   LoginDto,
@@ -27,6 +30,7 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @UsePipes(new ZodValidationPipe(RegisterSchema))
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({ status: 201, type: UserResponseDto })
   @ApiResponse({ status: 409, description: 'User already exists' })
@@ -36,6 +40,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @UsePipes(new ZodValidationPipe(LoginSchema))
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login user and set httpOnly cookie' })
   @ApiResponse({ status: 200, description: 'Login successful' })
