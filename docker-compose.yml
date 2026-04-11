@@ -37,6 +37,7 @@ services:
       - PORT=4000
       - DATABASE_URL=postgresql://user:password@postgres:5432/kan_todo?schema=public
       - S3_ENDPOINT=http://localstack:4566
+      - BASE_URL=http://localhost:3000
     volumes:
       - .:/app
       - /app/node_modules

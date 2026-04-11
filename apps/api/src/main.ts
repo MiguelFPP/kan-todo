@@ -7,6 +7,13 @@ import { DomainExceptionFilter } from './web/filters/domain-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Habilitar CORS usando la variable de entorno BASE_URL (URL del Frontend)
+  app.enableCors({
+    origin: process.env.BASE_URL || 'http://localhost:3000',
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  });
+
   app.use(cookieParser());
   app.useGlobalFilters(new DomainExceptionFilter());
 
