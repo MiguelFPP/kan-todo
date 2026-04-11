@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { UserResponseDto } from '@kan-todo/types';
+import { UserResponseDto, UserResponseSchema } from '@kan-todo/types';
 
 interface AuthState {
   user: UserResponseDto | null;
@@ -19,6 +19,19 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
+      // Convert JSON strings back to Date objects during hydration
+      onRehydrateStorage: () => (state) => {
+        if (state && state.user) {
+          const result = UserResponseSchema.safeParse(state.user);
+          if (result.success) {
+            state.user = result.data;
+          } else {
+            // If data is invalid or can't be hydrated, reset to null
+            state.user = null;
+            state.isAuthenticated = false;
+          }
+        }
+      },
     },
   ),
 );
