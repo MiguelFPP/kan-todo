@@ -11,10 +11,15 @@ import { BcryptService } from './bcrypt.service';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from '../../web/auth/auth.controller';
 
-const jwtSecret = process.env.JWT_SECRET;
-if (!jwtSecret) {
-  throw new Error('JWT_SECRET environment variable must be defined');
+function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable must be defined');
+  }
+  return secret;
 }
+
+const jwtSecret = getJwtSecret();
 
 @Module({
   imports: [
