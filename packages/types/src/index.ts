@@ -19,7 +19,7 @@ export const UserResponseSchema = z.object({
   id: z.string().uuid(),
   email: z.string().email(),
   fullName: z.string(),
-  createdAt: z.date(),
+  createdAt: z.coerce.date(),
 });
 
 export type UserResponseDto = z.infer<typeof UserResponseSchema>;
