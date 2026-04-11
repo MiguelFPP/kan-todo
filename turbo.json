@@ -8,6 +8,22 @@
     "lint": {
       "dependsOn": ["^lint"]
     },
+    "prisma:generate": {
+      "outputs": ["node_modules/.prisma/client/**"]
+    },
+    "prisma:push": {
+      "cache": false
+    },
+    "prisma:migrate": {
+      "cache": false
+    },
+    "prisma:studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "prisma:reset": {
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true

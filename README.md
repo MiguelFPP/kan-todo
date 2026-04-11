@@ -60,11 +60,13 @@ This will build the API and Web images (Node 25), install all dependencies, gene
 - **View logs:** `docker compose logs -f`
 - **Restart API:** `docker compose restart api`
 
-**Prisma & Database:**
-Run these while the containers are up:
-- **Generate Prisma Client:** `docker exec -it kan-todo-api npx prisma generate`
-- **Push DB Schema:** `docker exec -it kan-todo-api npx prisma db push`
-- **Prisma Studio:** `docker exec -it kan-todo-api npx prisma studio` (Go to http://localhost:5555)
+**Prisma & Database (inside Docker):**
+These scripts run the Prisma commands inside the `kan-todo-api` container:
+- **Generate Client:** `npm run docker:prisma:generate`
+- **Push Schema:** `npm run docker:prisma:push`
+- **Run Migrations:** `npm run docker:prisma:migrate`
+- **Prisma Studio:** `npm run docker:prisma:studio` (Go to http://localhost:5555)
+- **Reset DB:** `npm run docker:prisma:reset`
 
 ---
 
@@ -136,6 +138,14 @@ Start all services (API, Web, and Types watcher) in parallel:
 ```bash
 npm run dev
 ```
+
+### 5. Database Management (Prisma)
+When running locally (outside Docker), use these commands:
+- `npm run prisma:generate` - Updates the Prisma Client.
+- `npm run prisma:push` - Pushes schema changes directly (best for development).
+- `npm run prisma:migrate` - Creates and applies migrations.
+- `npm run prisma:studio` - Opens the visual database editor.
+- `npm run prisma:reset` - Resets the database and wipes data.
 
 ---
 

@@ -9,10 +9,22 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prisma:generate": "turbo run prisma:generate",
+    "prisma:push": "turbo run prisma:push",
+    "prisma:migrate": "turbo run prisma:migrate",
+    "prisma:studio": "turbo run prisma:studio",
+    "prisma:reset": "turbo run prisma:reset",
+    "docker:prisma:generate": "docker exec -it kan-todo-api npm run prisma:generate -w @kan-todo/api",
+    "docker:prisma:push": "docker exec -it kan-todo-api npm run prisma:push -w @kan-todo/api",
+    "docker:prisma:migrate": "docker exec -it kan-todo-api npm run prisma:migrate -w @kan-todo/api",
+    "docker:prisma:studio": "docker exec -it kan-todo-api npm run prisma:studio -w @kan-todo/api",
+    "docker:prisma:reset": "docker exec -it kan-todo-api npm run prisma:reset -w @kan-todo/api"
   },
   "devDependencies": {
     "@next/swc-linux-x64-gnu": "^16.2.3",
+    "@types/cookie-parser": "^1.4.10",
+    "autoprefixer": "^10.4.27",
     "prettier": "^3.0.0",
     "prisma": "^5.14.0",
     "turbo": "^2.0.0",

@@ -17,7 +17,6 @@ node_modules
 .env.development.local
 .env.test.local
 .env.production.local
-*.env*
 
 # Prisma
 **/generated-client
@@ -44,3 +43,4 @@ Thumbs.db
 # Infrastructure
 /infra/localstack
 aws/
+
