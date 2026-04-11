@@ -11,11 +11,16 @@ import { BcryptService } from './bcrypt.service';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from '../../web/auth/auth.controller';
 
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret) {
+  throw new Error('JWT_SECRET environment variable must be defined');
+}
+
 @Module({
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secretKey',
+      secret: jwtSecret,
       signOptions: { expiresIn: '1d' },
     }),
   ],
