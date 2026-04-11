@@ -30,24 +30,5 @@
     "turbo": "^2.0.0",
     "typescript": "^5.0.0"
   },
-  "packageManager": "npm@11.9.0",
-  "dependencies": {
-    "@nestjs/jwt": "^11.0.2",
-    "@nestjs/passport": "^11.0.5",
-    "@prisma/client": "^5.22.0",
-    "@radix-ui/react-label": "^2.1.8",
-    "@radix-ui/react-slot": "^1.2.4",
-    "@types/bcrypt": "^6.0.0",
-    "@types/passport-jwt": "^4.0.1",
-    "bcrypt": "^6.0.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "cookie-parser": "^1.4.7",
-    "lucide-react": "^1.8.0",
-    "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1",
-    "tailwind-merge": "^3.5.0",
-    "tailwindcss-animate": "^1.0.7",
-    "zustand": "^5.0.12"
-  }
+  "packageManager": "npm@11.9.0"
 }
