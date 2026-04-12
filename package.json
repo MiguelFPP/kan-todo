@@ -31,5 +31,8 @@
     "turbo": "^2.0.0",
     "typescript": "^5.0.0"
   },
-  "packageManager": "npm@11.9.0"
+  "packageManager": "npm@11.9.0",
+  "dependencies": {
+    "@aws-sdk/s3-request-presigner": "^3.1029.0"
+  }
 }
