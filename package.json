@@ -19,6 +19,7 @@
     "docker:prisma:push": "docker exec -it kan-todo-api npm run prisma:push -w @kan-todo/api",
     "docker:prisma:migrate": "docker exec -it kan-todo-api npm run prisma:migrate -w @kan-todo/api",
     "docker:prisma:studio": "docker exec -it kan-todo-api npm run prisma:studio -w @kan-todo/api",
+    "docker:prisma:seed": "docker exec -it kan-todo-api npm run prisma:seed -w @kan-todo/api",
     "docker:prisma:reset": "docker exec -it kan-todo-api npm run prisma:reset -w @kan-todo/api"
   },
   "devDependencies": {
