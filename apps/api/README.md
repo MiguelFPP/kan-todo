@@ -46,8 +46,15 @@ S3_ENDPOINT="http://localhost:4566"
 
 ### Commands
 -   `npm run dev`: Start NestJS in watch mode.
+-   `npm run prisma:seed`: Execute the seeding script with Faker data.
 -   `npx prisma studio`: Open the database GUI.
--   `npx prisma db push`: Sync the schema with the local DB.
+
+## 🧪 Seeding & Factories
+
+To maintain a consistent development environment, we use **Faker.js** and **Factories**:
+- **Location:** `prisma/factories/`
+- **Rule:** Every new database entity **must** have a corresponding factory.
+- **Execution:** The main script is `prisma/seed.ts`. It's executed via `npm run prisma:seed`.
 
 ## 📝 API Endpoints
 -   `GET /health`: Checks connectivity with PostgreSQL and S3.

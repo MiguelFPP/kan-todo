@@ -65,6 +65,7 @@ These scripts run the Prisma commands inside the `kan-todo-api` container:
 - **Generate Client:** `npm run docker:prisma:generate`
 - **Push Schema:** `npm run docker:prisma:push`
 - **Run Migrations:** `npm run docker:prisma:migrate`
+- **Run Seed:** `npm run docker:prisma:seed`
 - **Prisma Studio:** `npm run docker:prisma:studio` (Go to http://localhost:5555)
 - **Reset DB:** `npm run docker:prisma:reset`
 
