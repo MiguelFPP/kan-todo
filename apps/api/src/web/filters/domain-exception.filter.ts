@@ -10,6 +10,11 @@ import {
   UserAlreadyExistsError,
   InvalidCredentialsError,
 } from '../../core/domain/errors/auth.errors';
+import {
+  ProjectNotFoundError,
+  TaskNotFoundError,
+  PermissionDeniedError,
+} from '../../core/domain/errors/project.errors';
 
 @Catch(DomainError)
 export class DomainExceptionFilter implements ExceptionFilter {
@@ -24,6 +29,13 @@ export class DomainExceptionFilter implements ExceptionFilter {
       status = HttpStatus.CONFLICT;
     } else if (exception instanceof InvalidCredentialsError) {
       status = HttpStatus.UNAUTHORIZED;
+    } else if (
+      exception instanceof ProjectNotFoundError ||
+      exception instanceof TaskNotFoundError
+    ) {
+      status = HttpStatus.NOT_FOUND;
+    } else if (exception instanceof PermissionDeniedError) {
+      status = HttpStatus.FORBIDDEN;
     }
 
     response.status(status).json({
