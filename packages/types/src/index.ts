@@ -54,6 +54,13 @@ export const ProjectSchema = z.object({
 
 export type ProjectDto = z.infer<typeof ProjectSchema>;
 
+export const CreateProjectSchema = z.object({
+  name: z.string().min(1, 'Project name is required'),
+  description: z.string().optional(),
+});
+
+export type CreateProjectDto = z.infer<typeof CreateProjectSchema>;
+
 // --- Task Types ---
 
 export const TaskStatusEnum = z.enum(['BACKLOG', 'TODO', 'IN_PROGRESS', 'DONE']);
@@ -74,3 +81,19 @@ export const TaskSchema = z.object({
 });
 
 export type TaskDto = z.infer<typeof TaskSchema>;
+
+export const CreateTaskSchema = z.object({
+  title: z.string().min(1, 'Task title is required'),
+  description: z.string().optional(),
+  priority: z.number().int().min(0).max(10).optional().default(0),
+  dueDate: z.coerce.date().optional().nullable(),
+  assigneeId: z.string().uuid().optional().nullable(),
+});
+
+export type CreateTaskDto = z.infer<typeof CreateTaskSchema>;
+
+export const UpdateTaskStatusSchema = z.object({
+  status: TaskStatusEnum,
+});
+
+export type UpdateTaskStatusDto = z.infer<typeof UpdateTaskStatusSchema>;
