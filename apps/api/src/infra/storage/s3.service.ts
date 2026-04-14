@@ -1,17 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListBucketsCommand } from '@aws-sdk/client-s3';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListBucketsCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { IStorageService } from '../../core/domain/ports/storage-service.port';
 
 @Injectable()
-export class S3Service implements IStorageService {
+export class S3Service implements IStorageService, OnModuleInit {
   private client: S3Client;
   private bucketName: string;
 
   constructor() {
+    const endpoint = process.env.S3_ENDPOINT || 'http://localstack:4566';
+    console.log(`[S3Service] Initializing with endpoint: ${endpoint}`);
+
     this.client = new S3Client({
-      endpoint: process.env.S3_ENDPOINT,
-      region: process.env.S3_REGION,
+      endpoint: endpoint,
+      region: process.env.S3_REGION || 'us-east-1',
       credentials: {
         accessKeyId: process.env.S3_ACCESS_KEY_ID || 'test',
         secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || 'test',
@@ -19,6 +22,23 @@ export class S3Service implements IStorageService {
       forcePathStyle: true,
     });
     this.bucketName = process.env.S3_BUCKET_NAME || 'kan-todo-bucket';
+  }
+
+  async onModuleInit() {
+    await this.ensureBucketExists();
+  }
+
+  private async ensureBucketExists() {
+    try {
+      console.log(`[S3Service] Ensuring bucket exists: ${this.bucketName}`);
+      await this.client.send(new CreateBucketCommand({ Bucket: this.bucketName }));
+      console.log(`[S3Service] Bucket created or already exists.`);
+    } catch (error: any) {
+      if (error.name === 'BucketAlreadyOwnedByYou' || error.name === 'BucketAlreadyExists') {
+        return;
+      }
+      console.error('[S3Service] Error ensuring bucket exists:', error.message);
+    }
   }
 
   async checkConnection() {
