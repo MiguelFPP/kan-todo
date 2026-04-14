@@ -3,12 +3,24 @@ import {
   Controller,
   Param,
   Patch,
+  Post,
+  UploadedFile,
   UseGuards,
-  UsePipes,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
 import { UpdateTaskStatusUseCase } from '../../core/use-cases/projects/update-task-status.use-case';
+import { UploadTaskAttachmentUseCase } from '../../core/use-cases/projects/upload-task-attachment.use-case';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 import { UpdateTaskStatusSchema } from '@kan-todo/types';
@@ -19,7 +31,10 @@ import { TaskResponseDto, UpdateTaskStatusDto } from '../projects/dto/project-sw
 @UseGuards(AuthGuard('jwt'))
 @ApiBearerAuth()
 export class TaskController {
-  constructor(private readonly updateTaskStatusUseCase: UpdateTaskStatusUseCase) {}
+  constructor(
+    private readonly updateTaskStatusUseCase: UpdateTaskStatusUseCase,
+    private readonly uploadAttachmentUseCase: UploadTaskAttachmentUseCase,
+  ) {}
 
   @Patch(':id/status')
   @ApiOperation({ summary: 'Update task status' })
@@ -34,6 +49,38 @@ export class TaskController {
       userId: user.id,
       taskId,
       newStatus: dto.status,
+    });
+  }
+
+  @Post(':id/attachments')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Upload an attachment to a task' })
+  @ApiParam({ name: 'id', description: 'Task ID' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 201, description: 'Attachment uploaded successfully' })
+  async uploadAttachment(
+    @CurrentUser() user: any,
+    @Param('id') taskId: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.uploadAttachmentUseCase.execute({
+      taskId,
+      userId: user.id,
+      fileBuffer: file.buffer,
+      fileName: file.originalname,
+      mimeType: file.mimetype,
+      sizeBytes: file.size,
     });
   }
 }
