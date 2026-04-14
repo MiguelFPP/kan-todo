@@ -23,6 +23,7 @@ import {
   DragOverEvent,
   DragEndEvent,
   defaultDropAnimationSideEffects,
+  useDndContext,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -172,10 +173,20 @@ function KanbanColumn({ column, tasks }: ColumnProps) {
     },
   });
 
+  const { over } = useDndContext();
+
+  // Determine if we are hovering over this column or any of its tasks
+  const isOverColumn = over
+    ? over.id === column.status || tasks.some((t) => t.id === over.id)
+    : false;
+
   return (
     <div
       ref={setNodeRef}
-      className="flex flex-col gap-4 bg-muted/30 rounded-lg p-2 min-h-[500px]"
+      className={cn(
+        "flex flex-col gap-4 bg-muted/30 rounded-lg p-2 min-h-[500px] transition-colors duration-200",
+        isOverColumn && "bg-primary/10 ring-2 ring-primary/20 shadow-inner",
+      )}
     >
       <div className="flex items-center justify-between px-2 py-1">
         <h3 className="font-semibold text-sm flex items-center gap-2">
