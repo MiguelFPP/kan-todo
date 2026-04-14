@@ -9,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Calendar, MoreHorizontal, GripVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import UploadAttachmentModal from "./upload-attachment-modal";
 
 // DND Kit Imports
 import {
@@ -297,17 +298,20 @@ function TaskCard({ task, isOverlay, attributes, listeners }: TaskCardProps) {
             </span>
           </div>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log("Options clicked for task:", task.id);
-            }}
-          >
-            <MoreHorizontal size={14} />
-          </Button>
+          <div className="flex items-center gap-1">
+            <UploadAttachmentModal taskId={task.id} taskTitle={task.title} />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log("Options clicked for task:", task.id);
+              }}
+            >
+              <MoreHorizontal size={14} />
+            </Button>
+          </div>
         </div>
         <CardTitle className="text-sm font-medium leading-snug cursor-pointer hover:text-primary transition-colors">
           {task.title}
