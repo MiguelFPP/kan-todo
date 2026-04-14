@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useAuthStore } from "@/store/auth.store";
 import Sidebar from "@/components/dashboard/sidebar";
 import KanbanBoard from "@/components/dashboard/kanban-board";
-import { Plus, Search, Bell } from "lucide-react";
+import CreateTaskModal from "@/components/dashboard/create-task-modal";
+import { Search, Bell, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -51,10 +52,9 @@ export default function DashboardPage() {
             <Button variant="ghost" size="icon">
               <Bell size={20} className="text-muted-foreground" />
             </Button>
-            <Button className="gap-2 shadow-sm">
-              <Plus size={18} />
-              <span className="hidden sm:inline">Add Task</span>
-            </Button>
+            {selectedProjectId && (
+              <CreateTaskModal projectId={selectedProjectId} />
+            )}
           </div>
         </header>
 
@@ -92,6 +92,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-// Re-using LayoutGrid icon in the empty state
-import { LayoutGrid } from "lucide-react";

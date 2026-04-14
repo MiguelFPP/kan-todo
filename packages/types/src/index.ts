@@ -86,7 +86,10 @@ export const CreateTaskSchema = z.object({
   title: z.string().min(1, 'Task title is required'),
   description: z.string().optional(),
   priority: z.number().int().min(0).max(10).optional().default(0),
-  dueDate: z.coerce.date().optional().nullable(),
+  dueDate: z.preprocess(
+    (arg) => (arg === '' || arg === null ? undefined : arg),
+    z.coerce.date().optional().nullable(),
+  ),
   assigneeId: z.string().uuid().optional().nullable(),
 });
 
