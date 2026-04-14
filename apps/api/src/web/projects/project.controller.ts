@@ -45,12 +45,11 @@ export class ProjectController {
   ) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(CreateProjectSchema))
   @ApiOperation({ summary: 'Create a new project' })
   @ApiResponse({ status: 201, type: ProjectResponseDto })
   async create(
     @CurrentUser() user: any,
-    @Body() dto: CreateProjectDto,
+    @Body(new ZodValidationPipe(CreateProjectSchema)) dto: CreateProjectDto,
   ): Promise<ProjectResponseDto> {
     return this.createProjectUseCase.execute({
       ...dto,
@@ -79,14 +78,13 @@ export class ProjectController {
   }
 
   @Post(':id/tasks')
-  @UsePipes(new ZodValidationPipe(CreateTaskSchema))
   @ApiOperation({ summary: 'Add a task to a project' })
   @ApiParam({ name: 'id', description: 'Project ID' })
   @ApiResponse({ status: 201, type: TaskResponseDto })
   async addTask(
     @CurrentUser() user: any,
     @Param('id') projectId: string,
-    @Body() dto: CreateTaskDto,
+    @Body(new ZodValidationPipe(CreateTaskSchema)) dto: CreateTaskDto,
   ): Promise<TaskResponseDto> {
     return this.addTaskUseCase.execute({
       ...dto,

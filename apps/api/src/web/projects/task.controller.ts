@@ -22,14 +22,13 @@ export class TaskController {
   constructor(private readonly updateTaskStatusUseCase: UpdateTaskStatusUseCase) {}
 
   @Patch(':id/status')
-  @UsePipes(new ZodValidationPipe(UpdateTaskStatusSchema))
   @ApiOperation({ summary: 'Update task status' })
   @ApiParam({ name: 'id', description: 'Task ID' })
   @ApiResponse({ status: 200, type: TaskResponseDto })
   async updateStatus(
     @CurrentUser() user: any,
     @Param('id') taskId: string,
-    @Body() dto: UpdateTaskStatusDto,
+    @Body(new ZodValidationPipe(UpdateTaskStatusSchema)) dto: UpdateTaskStatusDto,
   ): Promise<TaskResponseDto> {
     return this.updateTaskStatusUseCase.execute({
       userId: user.id,
