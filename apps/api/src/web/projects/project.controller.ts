@@ -54,7 +54,7 @@ export class ProjectController {
   ): Promise<ProjectResponseDto> {
     return this.createProjectUseCase.execute({
       ...dto,
-      ownerId: user.userId,
+      ownerId: user.id,
     });
   }
 
@@ -62,7 +62,7 @@ export class ProjectController {
   @ApiOperation({ summary: 'List user projects' })
   @ApiResponse({ status: 200, type: [ProjectResponseDto] })
   async list(@CurrentUser() user: any): Promise<ProjectResponseDto[]> {
-    return this.listUserProjectsUseCase.execute(user.userId);
+    return this.listUserProjectsUseCase.execute(user.id);
   }
 
   @Get(':id/tasks')
@@ -75,7 +75,7 @@ export class ProjectController {
     @Param('id') projectId: string,
     @Query('status') status?: TaskStatus,
   ): Promise<TaskResponseDto[]> {
-    return this.getProjectTasksUseCase.execute(user.userId, projectId, status);
+    return this.getProjectTasksUseCase.execute(user.id, projectId, status);
   }
 
   @Post(':id/tasks')
@@ -91,7 +91,7 @@ export class ProjectController {
     return this.addTaskUseCase.execute({
       ...dto,
       projectId,
-      userId: user.userId,
+      userId: user.id,
     });
   }
 }

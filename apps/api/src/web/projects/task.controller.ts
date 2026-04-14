@@ -32,7 +32,7 @@ export class TaskController {
     @Body() dto: UpdateTaskStatusDto,
   ): Promise<TaskResponseDto> {
     return this.updateTaskStatusUseCase.execute({
-      userId: user.userId,
+      userId: user.id,
       taskId,
       newStatus: dto.status,
     });

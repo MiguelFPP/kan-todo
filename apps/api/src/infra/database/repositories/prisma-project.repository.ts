@@ -57,6 +57,16 @@ export class PrismaProjectRepository implements IProjectRepository {
     return projects.map((p) => this.mapToDomain(p));
   }
 
+  async findAllForUser(userId: string): Promise<Project[]> {
+    const projects = await this.prisma.project.findMany({
+      where: {
+        OR: [{ ownerId: userId }, { members: { some: { userId } } }],
+      },
+    });
+
+    return projects.map((p) => this.mapToDomain(p));
+  }
+
   async update(project: Project): Promise<Project> {
     const updated = await this.prisma.project.update({
       where: { id: project.id },
