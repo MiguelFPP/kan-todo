@@ -1,6 +1,7 @@
 import { Task, TaskStatus } from '../../domain/entities/task.entity';
 import { ITaskRepository } from '../../domain/ports/task-repository.port';
 import { CheckPermissionService } from './check-permission.service';
+import { PermissionDeniedError } from '../../domain/errors/project.errors';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface AddTaskInput {
@@ -27,7 +28,7 @@ export class AddTaskToProjectUseCase {
     );
 
     if (!hasPermission) {
-      throw new Error('User does not have permission to create tasks in this project');
+      throw new PermissionDeniedError('User does not have permission to create tasks in this project');
     }
 
     const task = new Task(

@@ -2,6 +2,7 @@ import { IStorageService } from '../../domain/ports/storage-service.port';
 import { ITaskRepository } from '../../domain/ports/task-repository.port';
 import { IAttachmentRepository } from '../../domain/ports/attachment-repository.port';
 import { CheckPermissionService } from './check-permission.service';
+import { TaskNotFoundError, PermissionDeniedError } from '../../domain/errors/project.errors';
 
 export interface UploadAttachmentInput {
   taskId: string;
@@ -23,7 +24,7 @@ export class UploadTaskAttachmentUseCase {
   async execute(input: UploadAttachmentInput): Promise<any> {
     const task = await this.taskRepository.findById(input.taskId);
     if (!task) {
-      throw new Error('Task not found');
+      throw new TaskNotFoundError(input.taskId);
     }
 
     const hasPermission = await this.checkPermission.can(
@@ -33,7 +34,7 @@ export class UploadTaskAttachmentUseCase {
     );
 
     if (!hasPermission) {
-      throw new Error('User does not have permission to edit tasks in this project');
+      throw new PermissionDeniedError('User does not have permission to edit tasks in this project');
     }
 
     const timestamp = Date.now();
