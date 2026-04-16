@@ -1,14 +1,19 @@
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
+function normalizeHeaders(headersInit?: HeadersInit): Record<string, string> {
+  if (!headersInit) return {};
+  const headers = new Headers(headersInit);
+  return Object.fromEntries(headers.entries());
+}
 
 export async function fetchWithAuth(url: string, options: RequestInit = {}) {
   const isFormData = options.body instanceof FormData;
 
-  const headers: Record<string, string> = {
-    ...options.headers as Record<string, string>,
-  };
+  const headers = normalizeHeaders(options.headers);
 
-  if (!isFormData) {
-    headers["Content-Type"] = "application/json";
+  if (!isFormData && !headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json';
   }
 
   const response = await fetch(`${API_URL}${url}`, {
