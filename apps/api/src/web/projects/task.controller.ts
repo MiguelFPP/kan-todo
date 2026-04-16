@@ -7,9 +7,13 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
+import * as multer from 'multer';
 import {
   ApiTags,
   ApiOperation,
@@ -72,7 +76,12 @@ export class TaskController {
   async uploadAttachment(
     @CurrentUser() user: any,
     @Param('id') taskId: string,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(new ParseFilePipe({
+      fileIsRequired: true,
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 }), // 10MB
+      ],
+    })) file: multer.File,
   ) {
     return this.uploadAttachmentUseCase.execute({
       taskId,
