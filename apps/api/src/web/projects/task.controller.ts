@@ -53,7 +53,7 @@ export class TaskController {
   }
 
   @Post(':id/attachments')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } }))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Upload an attachment to a task' })
   @ApiParam({ name: 'id', description: 'Task ID' })
