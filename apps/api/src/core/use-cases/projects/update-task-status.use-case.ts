@@ -32,7 +32,7 @@ export class UpdateTaskStatusUseCase {
     }
 
     if (task.isDeleted()) {
-      throw new Error('Cannot update status of a deleted task'); // This could be a specific error too but for now it's fine
+      throw new TaskNotFoundError(input.taskId);
     }
 
     const updatedTask = new Task(
