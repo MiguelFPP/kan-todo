@@ -15,7 +15,7 @@ import { IStorageService } from './core/domain/ports/storage-service.port';
     S3Service,
     {
       provide: IStorageService,
-      useClass: S3Service,
+      useExisting: S3Service,
     },
   ],
   exports: [
