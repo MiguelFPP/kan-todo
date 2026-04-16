@@ -9,12 +9,10 @@ import {
   UseInterceptors,
   ParseFilePipe,
   MaxFileSizeValidator,
-
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as multer from 'multer';
-
+import 'multer';
 import {
   ApiTags,
   ApiOperation,
@@ -82,7 +80,7 @@ export class TaskController {
       validators: [
         new MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 }), // 10MB
       ],
-    })) file: multer.File,
+    })) file: Express.Multer.File,
   ) {
     return this.uploadAttachmentUseCase.execute({
       taskId,
