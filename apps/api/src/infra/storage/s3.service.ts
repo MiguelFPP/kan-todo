@@ -56,6 +56,13 @@ export class S3Service implements IStorageService, OnModuleInit {
         return;
       }
 
+      // Special handling for LocalStack: HeadBucketCommand may not work properly
+      if (this.isLocalStack && (error.name === 'UnknownError' || error.message === 'UnknownError')) {
+        console.log(`[S3Service] LocalStack detected with UnknownError, attempting to create bucket directly`);
+        await this.createBucket();
+        return;
+      }
+
       // For other HeadBucket errors (access denied, etc.), log and rethrow
       console.error(`[S3Service] Error accessing bucket ${this.bucketName}:`, error.message);
       throw new Error(`Cannot access S3 bucket ${this.bucketName}: ${error.message}`);

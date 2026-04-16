@@ -24,17 +24,11 @@
   },
   "devDependencies": {
     "@next/swc-linux-x64-gnu": "^16.2.3",
-    "@types/cookie-parser": "^1.4.10",
-    "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.27",
     "prettier": "^3.0.0",
     "prisma": "^5.14.0",
     "turbo": "^2.0.0",
     "typescript": "^5.0.0"
   },
-  "packageManager": "npm@11.9.0",
-  "dependencies": {
-    "@aws-sdk/s3-request-presigner": "^3.1029.0",
-    "uuid": "^13.0.0"
-  }
+  "packageManager": "npm@11.9.0"
 }
