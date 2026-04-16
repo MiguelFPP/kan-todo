@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "@next/swc-linux-x64-gnu": "^16.2.3",
-    "@types/cookie-parser": "^1.4.10",
     "autoprefixer": "^10.4.27",
     "prettier": "^3.0.0",
     "prisma": "^5.14.0",

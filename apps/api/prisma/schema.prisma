@@ -14,5 +14,144 @@ model User {
   fullName     String   @map("full_name")
   createdAt    DateTime @default(now()) @map("created_at")
 
+  // Relationships
+  ownedProjects Project[]       @relation("ProjectOwner")
+  memberships   ProjectMember[]
+  assignedTasks Task[]          @relation("TaskAssignee")
+  comments      Comment[]
+
   @@map("users")
+}
+
+model Project {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  ownerId     String   @map("owner_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  owner   User            @relation("ProjectOwner", fields: [ownerId], references: [id])
+  members ProjectMember[]
+  tasks   Task[]
+
+  @@map("projects")
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // OWNER, ADMIN, EDITOR, VIEWER
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relationships
+  permissions RolePermission[]
+  members     ProjectMember[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique // e.g., task:create
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relationships
+  roles RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       Int @map("role_id")
+  permissionId Int @map("permission_id")
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model ProjectMember {
+  projectId String   @map("project_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  roleId    Int      @map("role_id")
+  joinedAt  DateTime @default(now()) @map("joined_at")
+
+  project Project @relation(fields: [projectId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  role    Role    @relation(fields: [roleId], references: [id])
+
+  @@id([projectId, userId])
+  @@map("project_members")
+}
+
+enum TaskStatus {
+  BACKLOG
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model Task {
+  id          String     @id @default(uuid()) @db.Uuid
+  title       String
+  description String?
+  status      TaskStatus @default(BACKLOG)
+  priority    Int        @default(0)
+  dueDate     DateTime?  @map("due_date")
+  projectId   String     @map("project_id") @db.Uuid
+  assigneeId  String?    @map("assignee_id") @db.Uuid
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  deletedAt   DateTime?  @map("deleted_at")
+
+  project     Project      @relation(fields: [projectId], references: [id])
+  assignee    User?        @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  subtasks    Subtask[]
+  attachments Attachment[]
+  comments    Comment[]
+
+  @@map("tasks")
+}
+
+model Subtask {
+  id          String  @id @default(uuid()) @db.Uuid
+  taskId      String  @map("task_id") @db.Uuid
+  title       String
+  isCompleted Boolean @default(false) @map("is_completed")
+
+  task Task @relation(fields: [taskId], references: [id])
+
+  @@map("subtasks")
+}
+
+model Attachment {
+  id         String   @id @default(uuid()) @db.Uuid
+  taskId     String   @map("task_id") @db.Uuid
+  fileName   String   @map("file_name")
+  s3Key      String   @map("s3_key")
+  mimeType   String   @map("mime_type")
+  sizeBytes  Int      @map("size_bytes")
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+
+  task Task @relation(fields: [taskId], references: [id])
+
+  @@map("attachments")
+}
+
+model Comment {
+  id        String   @id @default(uuid()) @db.Uuid
+  taskId    String   @map("task_id") @db.Uuid
+  authorId  String   @map("author_id") @db.Uuid
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  task   Task @relation(fields: [taskId], references: [id])
+  author User @relation(fields: [authorId], references: [id])
+
+  @@map("comments")
 }
